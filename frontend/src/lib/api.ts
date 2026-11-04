@@ -32,6 +32,20 @@ export function storeSessionToken(token: string): void {
   }
 }
 
+/**
+ * Forget the stored session so the next request starts a fresh identity.
+ *
+ * The token is the only thing this browser holds, so dropping it is a complete
+ * sign-out from the client's point of view.
+ */
+export function clearSessionToken(): void {
+  try {
+    window.sessionStorage.removeItem(SESSION_KEY)
+  } catch {
+    /* storage disabled: there is nothing to clear */
+  }
+}
+
 export class ApiError extends Error {
   readonly status: number
   readonly code: string

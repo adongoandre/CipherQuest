@@ -1,6 +1,7 @@
-import { NavLink, Link, useLocation } from 'react-router-dom'
+import { NavLink, Link, useLocation, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import type { ReactNode } from 'react'
+import { clearSessionToken } from '../lib/api'
 
 /**
  * Two shells, matching the mockups:
@@ -124,6 +125,7 @@ export function PublicLayout({
 
 export function AppLayout({ children }: { children: ReactNode }) {
   const { pathname } = useLocation()
+  const navigate = useNavigate()
   const [menuOpen, setMenuOpen] = useState(false)
 
   /** Settings is a footer link in the mockup, not a top-level pill. */
@@ -137,6 +139,13 @@ export function AppLayout({ children }: { children: ReactNode }) {
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [menuOpen])
+
+  /** Sign out: drop the stored session and go back to the landing page. */
+  function signOut() {
+    setMenuOpen(false)
+    clearSessionToken()
+    navigate('/', { replace: true })
+  }
 
   return (
     <div className="app-shell app-shell-split">
@@ -174,6 +183,9 @@ export function AppLayout({ children }: { children: ReactNode }) {
           >
             Settings
           </NavLink>
+          <button type="button" className="sidebar-settings sidebar-logout" onClick={signOut}>
+            Log out
+          </button>
         </div>
       </aside>
 
