@@ -33,7 +33,6 @@ export function PublicHeader({ guestLabel = 'Playing as guest' }: { guestLabel?:
       <div className="public-header-inner">
         <Brand />
         <nav className="public-nav" aria-label="Main">
-          <Link to="/#how-it-works">How it works</Link>
           <Link to="/help">Help &amp; accessibility</Link>
           <Link to="/join" className="guest-pill">
             {guestLabel}

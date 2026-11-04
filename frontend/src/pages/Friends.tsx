@@ -91,7 +91,7 @@ export function FriendsPage() {
           </button>
         </form>
       </section>
-
+      <br />
       <div className="card-grid two">
         <section className="card" aria-labelledby="requests-title">
           <h2 id="requests-title">Friend requests</h2>
@@ -186,7 +186,7 @@ export function FriendsPage() {
           )}
         </section>
       </div>
-
+      <br />
       <section className="card" aria-labelledby="list-title">
         <p className="eyebrow" id="list-title">
           Your friends ({data.friends.length})

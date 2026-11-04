@@ -183,7 +183,7 @@ export function LessonPage() {
           <span style={{ width: `${percent}%` }} />
         </div>
       </section>
-
+      <br />
       <section className="card" aria-labelledby="lesson-body">
         <h2 id="lesson-body">{lesson.title}</h2>
         {lesson.body.map((paragraph, index) => (

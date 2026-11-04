@@ -80,7 +80,7 @@ export function CompetePage() {
           {message && <p className="muted">{message}</p>}
         </section>
       </div>
-
+      <br />
       <section className="card" aria-labelledby="standings-title">
         <p className="eyebrow" id="standings-title">
           Current standings

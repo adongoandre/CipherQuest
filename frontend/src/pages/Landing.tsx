@@ -132,7 +132,6 @@ export function LandingPage() {
     <>
       <section className="hero" aria-labelledby="hero-title">
         <div>
-          <p className="eyebrow">Classical cryptography, playable</p>
           <h1 id="hero-title">Crack the code. Solve the riddle. Unlock the message.</h1>
           <p className="hero-tagline">A mystery you decrypt, one letter at a time.</p>
           <p className="lead">

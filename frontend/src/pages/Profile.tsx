@@ -111,7 +111,7 @@ export function ProfilePage() {
           )}
         </section>
       </div>
-
+      <br />
       <section className="card" aria-labelledby="recent-title">
         <p className="eyebrow" id="recent-title">
           Recent missions
@@ -145,7 +145,7 @@ export function ProfilePage() {
           </table>
         )}
       </section>
-
+      <br />
       <section className="card" aria-labelledby="privacy-title">
         <h2 id="privacy-title">Privacy</h2>
         <label className="checkbox-row">
@@ -162,6 +162,7 @@ export function ProfilePage() {
           />
           <span>Show me on public leaderboards</span>
         </label>
+        <br />
         <div className="button-row">
           <Link className="btn btn-secondary btn-block" to="/settings">
             Privacy settings

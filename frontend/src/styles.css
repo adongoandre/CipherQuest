@@ -1714,7 +1714,8 @@ hr.rule {
   margin-bottom: 0;
 }
 
-.radio-group {
+.radio-group,
+.checkbox-group {
   display: grid;
   gap: 0.6rem;
 }

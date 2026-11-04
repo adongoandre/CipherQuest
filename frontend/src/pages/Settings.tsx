@@ -152,7 +152,7 @@ export function SettingsPage() {
         <section className="card" aria-labelledby="a11y-title">
           <h2 id="a11y-title">Accessibility</h2>
 
-          <fieldset className="radio-group">
+          <fieldset className="radio-group" style={{ marginBottom: '1rem' }}>
             <legend>Text size</legend>
             {SIZES.map((size) => (
               <label key={size.value} className="radio-row">
@@ -174,109 +174,95 @@ export function SettingsPage() {
             ))}
           </fieldset>
 
-          <label className="checkbox-row">
-            <input
-              type="checkbox"
-              checked={draft.accessibility.high_contrast_text ?? false}
-              onChange={(e) => toggle('accessibility', 'high_contrast_text', e.target.checked)}
-            />
-            <span>High contrast</span>
-          </label>
-          <label className="checkbox-row">
-            <input
-              type="checkbox"
-              checked={draft.accessibility.reduce_motion ?? false}
-              onChange={(e) => toggle('accessibility', 'reduce_motion', e.target.checked)}
-            />
-            <span>Reduce motion</span>
-          </label>
-          <label className="checkbox-row">
-            <input
-              type="checkbox"
-              checked={draft.accessibility.sound_effects ?? false}
-              onChange={(e) => toggle('accessibility', 'sound_effects', e.target.checked)}
-            />
-            <span>Sound effects</span>
-          </label>
-          <label className="checkbox-row">
-            <input
-              type="checkbox"
-              checked={!(draft.play_style.timed_challenges ?? false)}
-              onChange={(e) => toggle('play_style', 'timed_challenges', !e.target.checked)}
-            />
-            <span>Relaxed (untimed) play by default</span>
-          </label>
-          <label className="checkbox-row">
-            <input
-              type="checkbox"
-              checked={draft.accessibility.dyslexic_friendly_font ?? false}
-              onChange={(e) => toggle('accessibility', 'dyslexic_friendly_font', e.target.checked)}
-            />
-            <span>Dyslexia-friendly font</span>
-          </label>
+          <fieldset className="checkbox-group">
+            <legend>Accessibility toggles</legend>
+            {Object.entries(draft.accessibility).map(([key, value]) => (
+              <label key={key} className="checkbox-row">
+                <input
+                  type="checkbox"
+                  checked={value}
+                  onChange={(e) => toggle('accessibility', key, e.target.checked)}
+                />
+                <span>{key.replace(/_/g, ' ')}</span>
+              </label>
+            ))}
+          </fieldset>
         </section>
-
+        <br />
         <section className="card" aria-labelledby="privacy-title">
           <h2 id="privacy-title">Privacy and account</h2>
-
-          <label className="checkbox-row">
-            <input
-              type="checkbox"
-              checked={draft.privacy.show_display_name ?? false}
-              onChange={(e) => toggle('privacy', 'show_display_name', e.target.checked)}
-            />
-            <span>Show my display name on leaderboards</span>
-          </label>
-          <label className="checkbox-row">
-            <input
-              type="checkbox"
-              checked={draft.privacy.anonymous_leaderboards ?? false}
-              onChange={(e) => toggle('privacy', 'anonymous_leaderboards', e.target.checked)}
-            />
-            <span>Hide my name, show me as anonymous</span>
-          </label>
-          <label className="checkbox-row">
-            <input
-              type="checkbox"
-              checked={draft.privacy.share_anonymous_data ?? false}
-              onChange={(e) => toggle('privacy', 'share_anonymous_data', e.target.checked)}
-            />
-            <span>Share anonymous play data to improve the game</span>
-          </label>
-
-          <div className="field">
-            <label htmlFor="settings-name">Display name</label>
-            <input
-              id="settings-name"
-              value={draft.display_name ?? ''}
-              onChange={(e) => {
-                setDraft({ ...draft, display_name: e.target.value })
-                setSaved(null)
-              }}
-              minLength={3}
-              maxLength={24}
-              disabled={draft.is_guest}
-            />
-            {draft.is_guest && <p className="field-help">Guests do not have an account yet.</p>}
-            {!draft.is_guest && draft.email && (
-              <p className="field-help">Signed in as {draft.email}</p>
-            )}
-          </div>
-
-          <div className="button-row">
+          <fieldset className="checkbox-group" style={{ marginBottom: '1rem' }}>
+            <legend>Privacy settings</legend>
+            <label className="checkbox-row">
+              <input
+                type="checkbox"
+                checked={draft.privacy.show_display_name ?? false}
+                onChange={(e) => toggle('privacy', 'show_display_name', e.target.checked)}
+              />
+              <span>Show my display name on leaderboards</span>
+            </label>
+            <label className="checkbox-row">
+              <input
+                type="checkbox"
+                checked={draft.privacy.anonymous_leaderboards ?? false}
+                onChange={(e) => toggle('privacy', 'anonymous_leaderboards', e.target.checked)}
+              />
+              <span>Hide my name, show me as anonymous</span>
+            </label>
+            <label className="checkbox-row">
+              <input
+                type="checkbox"
+                checked={draft.privacy.share_anonymous_data ?? false}
+                onChange={(e) => toggle('privacy', 'share_anonymous_data', e.target.checked)}
+              />
+              <span>Share anonymous play data to improve the game</span>
+            </label>
+          </fieldset>
+          <fieldset className="checkbox-group" style={{ marginBottom: '1rem' }}>
+            <legend>Account settings</legend>
+            <label className="checkbox-row">
+              <input
+                type="checkbox"
+                checked={draft.play_style.remember_play_style ?? false}
+                onChange={(e) => toggle('play_style', 'remember_play_style', e.target.checked)}
+              />
+              <span>Remember my play style (duel or team)</span>
+            </label>
+            <div className="field">
+              <label htmlFor="settings-name">Display name</label>
+              <input
+                id="settings-name"
+                value={draft.display_name ?? ''}
+                onChange={(e) => {
+                  setDraft({ ...draft, display_name: e.target.value })
+                  setSaved(null)
+                }}
+                minLength={3}
+                maxLength={24}
+                disabled={draft.is_guest}
+              />
+              {draft.is_guest && <p className="field-help">Guests do not have an account yet.</p>}
+              {!draft.is_guest && draft.email && (
+                <p className="field-help">Signed in as {draft.email}</p>
+              )}
+            </div>
+            <div className="button-row">
+              <button type="button" className="btn btn-secondary" onClick={downloadData}>
+                Download my data
+              </button>
+              <button
+                type="button"
+                className="btn btn-danger"
+                onClick={deleteAccount}
+                disabled={busy}
+              >
+                Delete my account
+              </button>
+            </div>
+          </fieldset>
+          <div className="button-row" >
             <button type="submit" className="btn btn-primary" disabled={busy}>
               {busy ? 'Working…' : 'Save changes'}
-            </button>
-            <button type="button" className="btn btn-secondary" onClick={downloadData}>
-              Download my data
-            </button>
-            <button
-              type="button"
-              className="btn btn-danger"
-              onClick={deleteAccount}
-              disabled={busy || draft.is_guest}
-            >
-              Delete account
             </button>
           </div>
         </section>
