@@ -35,6 +35,14 @@ npm run dev                                       # http://localhost:5173
 The backend also seeds automatically on first boot if the database is empty.
 Interactive API docs: <http://127.0.0.1:8000/docs>
 
+### Windows: one-click start
+
+After the setup above, double-click **`start-cipherquest.bat`** (or the
+`CipherQuest` shortcut on the Desktop). It opens the API and the web app in
+their own windows, waits until both answer, then opens <http://localhost:5173>.
+Anything already running is reused, so it is safe to run twice. Close the two
+windows — or press `Ctrl+C` in each — to stop the application.
+
 The Vite dev server proxies `/api` to `127.0.0.1:8000`, so no extra CORS setup is
 needed locally (the backend still enforces `FRONTEND_ORIGIN`).
 
