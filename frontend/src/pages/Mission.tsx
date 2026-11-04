@@ -371,7 +371,15 @@ export function MissionPage() {
             {brief.narrative}
           </p>
         </div>
-        
+        <p className="sr-only" aria-live="polite" ref={liveRef} />
+        {feedback && (
+          <p className="notice" role="status">
+            <span className="notice-icon" aria-hidden="true">
+              ℹ
+            </span>
+            <span className="notice-body">{feedback}</span>
+          </p>
+        )}
       </header>
 
       
@@ -466,9 +474,18 @@ export function MissionPage() {
                 />
               </svg>
             </div>
-            <h2>The answer to the riddle is</h2>
+            <h2 id="key-title">How {keyReveal.accepted_answer} becomes your key</h2>
             <p className="key-word">{keyReveal.accepted_answer}</p>
             <p style={{ maxWidth: '52ch' }}>{keyReveal.key_rule_description}</p>
+
+            <div className="panel" style={{ marginTop: '1rem' }}>
+              <p className="mono" style={{ margin: 0, letterSpacing: '0.16em' }}>
+                {keyReveal.accepted_answer.split('').join(' · ')} = {keyReveal.parameter} letters
+              </p>
+              <p className="mono" style={{ margin: '0.35rem 0 0' }}>
+                shift = {keyReveal.parameter}
+              </p>
+            </div>
 
             <div className="button-row" style={{ marginTop: '1.25rem' }}>
               <button type="button" className="btn btn-primary" onClick={showClue} disabled={busy}>

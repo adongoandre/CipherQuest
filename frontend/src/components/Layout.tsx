@@ -1,4 +1,5 @@
 import { NavLink, Link, useLocation } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 import type { ReactNode } from 'react'
 
 /**
@@ -27,14 +28,62 @@ function Brand({ to = '/' }: { to?: string }) {
   )
 }
 
+/** Hamburger for narrow screens: three bars that fold into an X while open. */
+function NavToggle({
+  open,
+  controls,
+  onToggle,
+}: {
+  open: boolean
+  controls: string
+  onToggle: () => void
+}) {
+  return (
+    <button
+      type="button"
+      className={`nav-toggle${open ? ' is-open' : ''}`}
+      aria-label={open ? 'Close menu' : 'Open menu'}
+      aria-expanded={open}
+      aria-controls={controls}
+      onClick={onToggle}
+    >
+      <span className="nav-toggle-bar" aria-hidden="true" />
+      <span className="nav-toggle-bar" aria-hidden="true" />
+      <span className="nav-toggle-bar" aria-hidden="true" />
+    </button>
+  )
+}
+
 export function PublicHeader({ guestLabel = 'Playing as guest' }: { guestLabel?: string }) {
+  const [menuOpen, setMenuOpen] = useState(false)
+
+  useEffect(() => {
+    if (!menuOpen) return
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setMenuOpen(false)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [menuOpen])
+
   return (
     <header className="public-header">
       <div className="public-header-inner">
         <Brand />
-        <nav className="public-nav" aria-label="Main">
-          <Link to="/help">Help &amp; accessibility</Link>
-          <Link to="/join" className="guest-pill">
+        <NavToggle
+          open={menuOpen}
+          controls="public-nav"
+          onToggle={() => setMenuOpen((open) => !open)}
+        />
+        <nav
+          id="public-nav"
+          className={`public-nav${menuOpen ? ' is-open' : ''}`}
+          aria-label="Main"
+        >
+          <Link to="/help" onClick={() => setMenuOpen(false)}>
+            Help &amp; accessibility
+          </Link>
+          <Link to="/join" className="guest-pill" onClick={() => setMenuOpen(false)}>
             {guestLabel}
           </Link>
         </nav>
@@ -75,9 +124,19 @@ export function PublicLayout({
 
 export function AppLayout({ children }: { children: ReactNode }) {
   const { pathname } = useLocation()
+  const [menuOpen, setMenuOpen] = useState(false)
 
   /** Settings is a footer link in the mockup, not a top-level pill. */
   const settingsActive = pathname.startsWith('/settings')
+
+  useEffect(() => {
+    if (!menuOpen) return
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setMenuOpen(false)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [menuOpen])
 
   return (
     <div className="app-shell app-shell-split">
@@ -86,24 +145,36 @@ export function AppLayout({ children }: { children: ReactNode }) {
       </a>
 
       <aside className="sidebar">
-        <Brand to="/home" />
-        <nav className="sidebar-nav" aria-label="Main">
-          {APP_NAV.map((item) => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              className={({ isActive }) => (isActive ? 'active' : undefined)}
-            >
-              {item.label}
-            </NavLink>
-          ))}
-        </nav>
-        <NavLink
-          to="/settings"
-          className={`sidebar-settings${settingsActive ? ' active' : ''}`}
-        >
-          Settings
-        </NavLink>
+        <div className="sidebar-bar">
+          <Brand to="/home" />
+          <NavToggle
+            open={menuOpen}
+            controls="app-nav-menu"
+            onToggle={() => setMenuOpen((open) => !open)}
+          />
+        </div>
+
+        <div id="app-nav-menu" className={`sidebar-menu${menuOpen ? ' is-open' : ''}`}>
+          <nav className="sidebar-nav" aria-label="Main">
+            {APP_NAV.map((item) => (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                className={({ isActive }) => (isActive ? 'active' : undefined)}
+                onClick={() => setMenuOpen(false)}
+              >
+                {item.label}
+              </NavLink>
+            ))}
+          </nav>
+          <NavLink
+            to="/settings"
+            className={`sidebar-settings${settingsActive ? ' active' : ''}`}
+            onClick={() => setMenuOpen(false)}
+          >
+            Settings
+          </NavLink>
+        </div>
       </aside>
 
       <main className="app-main" id="main">
